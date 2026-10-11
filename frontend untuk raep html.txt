@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KK5 Facility Booking</title>
+  <title>KK9 Facility Booking</title>
 
   <style>
     * { box-sizing: border-box; }
@@ -78,7 +78,7 @@
 <body>
   <main class="container">
     <header class="header">
-      <h1>KK5 Facility Booking</h1>
+      <h1>KK9 Facility Booking</h1>
       <p>Select a facility to view its availability and make a booking directly.</p>
     </header>
 
@@ -177,8 +177,8 @@
   <script>
     "use strict";
 
-    const PUBLIC_SHEET_ID = "YOUR_PUBLIC_SPREADSHEET_ID";
-    const APPS_SCRIPT_URL = "YOUR_APPS_SCRIPT_DEPLOYMENT_URL";
+    const PUBLIC_SHEET_ID = "1dW5ZoThMFzC4LJ_RJ52Ro9cYqLR-tQPIIYbUb8db4gA";
+    const APPS_SCRIPT_URL = "https://script.google.com/u/0/home/projects/1nS3VGzdIfj5CqTKB4kb6uj2QGtQHMkJINtRo5wPw24yLWOHB6ynaUxIe/edit";
     const SLOT_INTERVAL = 30;
 
     let facilities = [];
