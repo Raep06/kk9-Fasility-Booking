@@ -178,7 +178,7 @@
     "use strict";
 
     const PUBLIC_SHEET_ID = "1dW5ZoThMFzC4LJ_RJ52Ro9cYqLR-tQPIIYbUb8db4gA";
-    const APPS_SCRIPT_URL = "https://script.google.com/u/0/home/projects/1nS3VGzdIfj5CqTKB4kb6uj2QGtQHMkJINtRo5wPw24yLWOHB6ynaUxIe/edit";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyCaHY5MIAEmQl8pZzpHYwRW6vWz6L8afG2ZzHdw1rs1uzXfs9Sr-n9D4Gxgry3iwo/exec";
     const SLOT_INTERVAL = 30;
 
     let facilities = [];
