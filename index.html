@@ -442,28 +442,96 @@ emailInput.addEventListener("blur", validateEmailFormat);
       }
     }
 
-    function parseBookingsForRange(data, facilityName, startStr, endStr) {
-      const map = {};
-      getDatesBetween(parseDateOnly(startStr), parseDateOnly(endStr)).forEach(d => { map[formatDateObject(d)] = []; });
-      if (!data || !data.table || !Array.isArray(data.table.rows)) return map;
+    
+function parseBookingsForRange(data, facilityName, startStr, endStr) {
+  const map = {};
 
-      data.table.rows.forEach(row => {
-        const cells = row.c || [];
-        const facility = String(getCellValue(cells[0])).trim();
-        const date = parseSheetDate(cells[1]);
-        const bStart = normalizeSheetTime(cells[2]);
-        const bEnd = normalizeSheetTime(cells[3]);
-        const status = String(getCellValue(cells[4])).trim().toUpperCase();
+  getDatesBetween(
+    parseDateOnly(startStr),
+    parseDateOnly(endStr)
+  ).forEach(d => {
+    map[formatDateObject(d)] = [];
+  });
 
-        if (facility.toLowerCase() !== facilityName.toLowerCase()) return;
-        if (status !== "PENDING" && status !== "APPROVED") return;
-        if (!date || !bStart || !bEnd) return;
+  if (!data || !data.table || !Array.isArray(data.table.rows)) {
+    console.error("Invalid booking data:", data);
+    return map;
+  }
 
-        const dateKey = formatDateObject(date);
-        if (map[dateKey]) map[dateKey].push({ start: bStart, end: bEnd, status });
+  data.table.rows.forEach(row => {
+    const cells = row.c || [];
+
+    // Public sheet: A Facility, B Date, C Start, D End, E Status
+    const facility = String(getCellValue(cells[0])).trim();
+    const date = parseSheetDate(cells[1]);
+    const bStart = normalizeBookingTime(cells[2]);
+    const bEnd = normalizeBookingTime(cells[3]);
+    const status = String(getCellValue(cells[4]))
+      .trim()
+      .toUpperCase();
+
+    if (facility.toLowerCase() !== facilityName.trim().toLowerCase()) return;
+    if (status !== "PENDING" && status !== "APPROVED") return;
+    if (!date || !bStart || !bEnd) return;
+
+    const dateKey = formatDateObject(date);
+
+    if (map[dateKey]) {
+      map[dateKey].push({
+        start: bStart,
+        end: bEnd,
+        status: status
       });
-      return map;
     }
+  });
+
+  console.log("Bookings loaded:", map);
+  return map;
+}
+
+function normalizeBookingTime(cell) {
+  if (!cell) return "";
+
+  const raw = cell.v == null ? "" : String(cell.v).trim();
+  const formatted = cell.f == null ? "" : String(cell.f).trim();
+
+  // Handle Google Sheets time values like Date(1899,11,30,10,0,0)
+  const dateMatch = raw.match(
+    /^Date\(\d+,\d+,\d+(?:,(\d+),(\d+),(\d+))?\)$/
+  );
+
+  if (dateMatch && dateMatch[1] !== undefined) {
+    return String(Number(dateMatch[1])).padStart(2, "0") +
+      ":" + String(Number(dateMatch[2])).padStart(2, "0");
+  }
+
+  const value = formatted || raw;
+
+  // Handle 10:00 AM and 10:00 PM
+  const twelveHour = value.match(
+    /^(\d{1,2}):(\d{2})(?::\d{2})?\s*(AM|PM)$/i
+  );
+
+  if (twelveHour) {
+    let hours = Number(twelveHour[1]) % 12;
+    if (twelveHour[3].toUpperCase() === "PM") hours += 12;
+
+    return String(hours).padStart(2, "0") +
+      ":" + twelveHour[2];
+  }
+
+  // Handle 10:00 and 10:00:00
+  const twentyFourHour = value.match(
+    /^(\d{1,2}):(\d{2})(?::\d{2})?$/
+  );
+
+  if (twentyFourHour) {
+    return String(Number(twentyFourHour[1])).padStart(2, "0") +
+      ":" + twentyFourHour[2];
+  }
+
+  return "";
+}
 
     function renderAvailabilityMatrix() {
       availabilityContainer.innerHTML = "";
