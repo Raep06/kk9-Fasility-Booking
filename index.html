@@ -229,6 +229,36 @@
 
     document.addEventListener("DOMContentLoaded", initializeApp);
     bookingForm.addEventListener("submit", submitBooking);
+    
+const emailInput = document.getElementById("email");
+const emailError = document.getElementById("emailError");
+
+function validateEmailFormat() {
+  const email = emailInput.value.trim();
+
+  // Let the browser handle an empty required field.
+  if (email === "") {
+    emailError.style.display = "none";
+    emailInput.setCustomValidity("");
+    return false;
+  }
+
+  // Basic format check, including a domain with a dot.
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const isValid = emailPattern.test(email);
+
+  emailInput.setCustomValidity(
+    isValid ? "" : "Please enter a valid email address."
+  );
+
+  emailError.style.display = isValid ? "none" : "block";
+
+  return isValid;
+}
+
+emailInput.addEventListener("input", validateEmailFormat);
+emailInput.addEventListener("blur", validateEmailFormat);
+
 
     async function fetchGviz(sheetName) {
       const url = "https://docs.google.com/spreadsheets/d/" + PUBLIC_SHEET_ID + "/gviz/tq?sheet=" + encodeURIComponent(sheetName) + "&tqx=out:json";
