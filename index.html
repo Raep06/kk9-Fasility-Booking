@@ -64,22 +64,23 @@
     .slot:hover { border-color: #2563eb; background: #eff6ff; }
     .slot.selected { border-color: #2563eb; background: #2563eb; color: white; font-weight: 600; }
     
-.slot.booked {
-  cursor: not-allowed;
-  background: #e5e7eb;
-  color: #6b7280;
-  border-color: #d1d5db;
-  opacity: 0.7;
-  pointer-events: none;
+
+.slot.booked,
+.slot.booked:disabled {
+  background-color: #9ca3af !important;
+  color: #ffffff !important;
+  border: 2px solid #6b7280 !important;
+  cursor: not-allowed !important;
+  opacity: 1 !important;
 }
 
-.slot.pending {
-  cursor: not-allowed;
-  background: #ffedd5;
-  color: #9a3412;
-  border-color: #fdba74;
-  opacity: 0.85;
-  pointer-events: none;
+.slot.pending,
+.slot.pending:disabled {
+  background-color: #fed7aa !important;
+  color: #9a3412 !important;
+  border: 2px solid #ea580c !important;
+  cursor: not-allowed !important;
+  opacity: 1 !important;
 }
 
     .continue-button, .submit-button { width: 100%; min-height: 48px; margin-top: 18px; border: none; border-radius: 9px; background: #111827; color: white; font-size: 15px; font-weight: 600; cursor: pointer; }
