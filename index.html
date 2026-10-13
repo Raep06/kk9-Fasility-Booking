@@ -431,16 +431,38 @@ emailInput.addEventListener("blur", validateEmailFormat);
       await loadAvailability();
     });
 
-    async function loadAvailability() {
-      availabilityContainer.innerHTML = "<div class='message loading'>Loading availability...</div>";
-      try {
-        const data = await fetchGviz("Bookings");
-        currentBookingsByDate = parseBookingsForRange(data, selectedFacility.facility, selectedStartDate, selectedEndDate);
-        renderAvailabilityMatrix();
-      } catch (err) {
-        availabilityContainer.innerHTML = "<div class='message error'>Failed to load availability.</div>";
-      }
-    }
+    
+async function loadAvailability() {
+  availabilityContainer.innerHTML =
+    "<div class='message loading'>Loading availability...</div>";
+
+  try {
+    const data = await fetchGviz("Bookings");
+
+    console.log("PUBLIC BOOKINGS DATA:", data);
+
+    currentBookingsByDate = parseBookingsForRange(
+      data,
+      selectedFacility.facility,
+      selectedStartDate,
+      selectedEndDate
+    );
+
+    console.log("PARSED BOOKINGS:", currentBookingsByDate);
+    console.log("SELECTED FACILITY:", selectedFacility.facility);
+    console.log("SELECTED DATE:", selectedStartDate);
+
+    renderAvailabilityMatrix();
+
+  } catch (err) {
+    console.error("Availability loading failed:", err);
+
+    availabilityContainer.innerHTML =
+      "<div class='message error'>Failed to load availability. " +
+      err.message + "</div>";
+  }
+}
+
 
     
 function parseBookingsForRange(data, facilityName, startStr, endStr) {
