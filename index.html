@@ -568,7 +568,12 @@
       }
       return parseDateOnly(cell.f || cell.v);
     }
-    function formatDateObject(d) { return d.toISOString().split("T")[0]; }
+    function formatDateObject(d) {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
     function parseDateOnly(val) {
       if (!val) return null;
       const m = String(val).match(/^(\d{4})-(\d{2})-(\d{2})$/);
